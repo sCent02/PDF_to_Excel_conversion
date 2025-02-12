@@ -8,7 +8,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Alignment, Font, Border, Side
 from openpyxl.cell import MergedCell
 from openpyxl.utils import get_column_letter
-from xlwings import Book
+import xlwings as xw
 
 EXCEL_TEMPLATE = "Reimbursement_Final_File_2.xlsx"
 
@@ -67,7 +67,8 @@ def process_pdf(pdf_file, output_folder):
     wb_new.save(output_excel)
 
     # Open the target Excel file and write the data into it
-    wb = Book(EXCEL_TEMPLATE)
+    app = xw.App(visible=False)
+    wb = app.books.open(EXCEL_TEMPLATE)
     ws = wb.sheets['EXPENSE FORM']
 
     # Load the new data from the Excel file created
@@ -83,7 +84,6 @@ def process_pdf(pdf_file, output_folder):
 
     temp_excel_file = os.path.join(output_folder, "Reimbursement_Init.xlsx")
     wb.save(temp_excel_file)
-    app = wb.app
     wb.close()
     app.kill()
 
