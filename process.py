@@ -9,10 +9,12 @@ from openpyxl.styles import Alignment, Font, Border, Side
 from openpyxl.cell import MergedCell
 from openpyxl.utils import get_column_letter
 import xlwings as xw
+import pythoncom
 
 EXCEL_TEMPLATE = "Reimbursement_Final_File_2.xlsx"
 
 def process_pdf(pdf_file, output_folder):
+    pythoncom.CoInitialize()
     with pdfplumber.open(pdf_file) as f:
         all_tables = []
         for page in f.pages:
@@ -91,6 +93,7 @@ def process_pdf(pdf_file, output_folder):
 
 
 def finalize_excel(excel_file, pdf_file, output_folder, df_merged, START_COL, END_COL):
+    pythoncom.CoInitialize()
     wb = load_workbook(excel_file)
     ws = wb.active
 
